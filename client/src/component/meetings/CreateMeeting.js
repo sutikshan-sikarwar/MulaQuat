@@ -1,56 +1,96 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const CreateMeeting = () => {
-  const [formData, setFormData] = useState({
+  // State variables to store meeting details and error message
+  const [meetingDetails, setMeetingDetails] = useState({
     title: '',
-    description: '',
+    date: '',
     startTime: '',
     endTime: ''
   });
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const { title, description, startTime, endTime } = formData;
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
+  // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/meetings', formData)
-      .then(response => {
-        console.log('Meeting created successfully:', response.data);
-        // Redirect to meeting details page or display success message
-      })
-      .catch(error => {
-        console.error('Error creating meeting:', error);
-      });
+    
+    // Check if any field is empty
+    for (const key in meetingDetails) {
+      if (meetingDetails[key].trim() === '') {
+        setErrorMessage(`Please enter ${key === 'title' ? 'a' : 'an'} ${key}.`);
+        return;
+      }
+    }
+
+    // TODO: Add code to create meeting (e.g., API call)
+    console.log('Meeting details:', meetingDetails);
+    // Reset input fields and error message
+    setMeetingDetails({
+      title: '',
+      date: '',
+      startTime: '',
+      endTime: ''
+    });
+    setErrorMessage('');
   };
 
   return (
-    <div>
-      <h2>Create Meeting</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Title:</label>
-          <input type="text" name="title" value={title} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Description:</label>
-          <textarea name="description" value={description} onChange={handleChange} />
-        </div>
-        <div>
-          <label>Start Time:</label>
-          <input type="datetime-local" name="startTime" value={startTime} onChange={handleChange} />
-        </div>
-        <div>
-          <label>End Time:</label>
-          <input type="datetime-local" name="endTime" value={endTime} onChange={handleChange} />
-        </div>
-        <button type="submit">Create</button>
-      </form>
+    <div className="container mx-auto mt-8 flex justify-center items-center">
+      <div className="max-w-lg">
+        <h1 className="text-2xl font-bold mb-4">Create a New Meeting</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="title">Meeting Title</label>
+            <input 
+              type="text" 
+              id="title"
+              placeholder="Enter meeting title" 
+              value={meetingDetails.title}
+              onChange={(e) => setMeetingDetails({ ...meetingDetails, title: e.target.value })}
+              className="px-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="date">Date</label>
+            <input 
+              type="date" 
+              id="date"
+              value={meetingDetails.date}
+              onChange={(e) => setMeetingDetails({ ...meetingDetails, date: e.target.value })}
+              className="px-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="startTime">From</label>
+            <input 
+              type="time" 
+              id="startTime"
+              value={meetingDetails.startTime}
+              onChange={(e) => setMeetingDetails({ ...meetingDetails, startTime: e.target.value })}
+              className="px-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-bold mb-2" htmlFor="endTime">To</label>
+            <input 
+              type="time" 
+              id="endTime"
+              value={meetingDetails.endTime}
+              onChange={(e) => setMeetingDetails({ ...meetingDetails, endTime: e.target.value })}
+              className="px-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-blue-500"
+            />
+          </div>
+          <button 
+            type="submit" 
+            className="bg-gray-600 ml-12 text-white px-6 py-2 rounded-md shadow-md hover:bg-gray-800 transition duration-300"
+          >
+            Create Meeting
+          </button>
+        </form>
+        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+      </div>
     </div>
   );
-}
+};
 
 export default CreateMeeting;

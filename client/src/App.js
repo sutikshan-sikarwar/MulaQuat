@@ -5,11 +5,13 @@ import Register from './pages/Register';
 import Meetings from './pages/Meetings';
 import NotFound from './pages/NotFound';
 import Navbar from './component/layout/Navbar';
+import CreateMeeting from './component/meetings/CreateMeeting';
 
 function App() {
   return (
     <>
     <Navbar/>
+    <Home/>
     </>
   );
 }

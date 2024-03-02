@@ -4,9 +4,14 @@ const Navbar = () => {
   // Function to get the current date and time
   const getCurrentDateTime = () => {
     const currentDate = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-    const dateTimeString = currentDate.toLocaleDateString('en-US', options);
-    return dateTimeString.replace('at', ''); // Remove "at" from the time string
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    
+    const dateString = currentDate.toLocaleDateString('en-US', dateOptions);
+    const timeString = currentDate.toLocaleTimeString('en-US', timeOptions);
+
+    return `${dateString}, ${timeString}`;
   };
 
   return (
@@ -24,4 +29,3 @@ const Navbar = () => {
 }
 
 export default Navbar;
-
